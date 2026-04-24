@@ -30,18 +30,32 @@ function checkLoginStatus() {
 
 function renderHome() {
     const articles = JSON.parse(localStorage.getItem('phuong_articles')) || [];
+    const user = sessionStorage.getItem('currentUser'); // Kiểm tra xem có ai đang đăng nhập không
+    
     let html = `<h2 class="section-title">TIN TỨC - SỰ KIỆN MỚI NHẤT</h2><div class="article-grid">`;
     
     if (articles.length === 0) {
         html += `<p style="grid-column: span 2; color:#888;">Hệ thống chưa có bài viết nào.</p>`;
     } else {
         articles.forEach((art, index) => {
+            
+            // Tạo nút Xóa (chỉ hiển thị nếu cán bộ đã đăng nhập)
+            let deleteButton = "";
+            if (user) {
+                deleteButton = `
+                    <button onclick="deletePost(${index}, event)" style="margin-top: 15px; width: 100%; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        🗑️ Xóa bài viết
+                    </button>
+                `;
+            }
+
             html += `
                 <div class="article-card" onclick="renderDetail(${index})">
                     <img src="${art.image}" alt="Thumb">
                     <div class="article-body">
                         <h3 class="article-title">${art.title}</h3>
                         <span class="article-date">🕒 ${art.date}</span>
+                        ${deleteButton}
                     </div>
                 </div>
             `;
@@ -49,6 +63,29 @@ function renderHome() {
     }
     html += `</div>`;
     appContent.innerHTML = html;
+}
+
+// Hàm xử lý việc xóa bài viết
+function deletePost(index, event) {
+    // Ngăn không cho sự kiện click lan ra thẻ cha (tránh việc click Xóa mà lại mở chi tiết bài viết)
+    event.stopPropagation(); 
+
+    // Hiển thị hộp thoại xác nhận để tránh bấm nhầm
+    if (confirm("Đồng chí có chắc chắn muốn xóa bài báo này không? Thao tác này không thể hoàn tác!")) {
+        
+        // 1. Lấy danh sách bài viết hiện tại
+        let articles = JSON.parse(localStorage.getItem('phuong_articles')) || [];
+        
+        // 2. Xóa 1 phần tử tại vị trí 'index'
+        articles.splice(index, 1);
+        
+        // 3. Lưu lại danh sách mới vào bộ nhớ
+        localStorage.setItem('phuong_articles', JSON.stringify(articles));
+        
+        // 4. Thông báo và tải lại giao diện
+        alert("Đã xóa bài viết thành công!");
+        renderHome();
+    }
 }
 
 function renderPostForm() {
