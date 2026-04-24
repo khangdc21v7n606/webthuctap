@@ -33,9 +33,9 @@
         <h2>PORTAL QUẢN TRỊ VIÊN</h2>
         <p style="text-align:center; color:#666; font-size:14px; margin-bottom:25px;">Chỉ dành riêng cho Admin cấp cao</p>
         <label>Tài khoản Admin</label>
-        <input type="text" id="au" placeholder="Nhập: khang">
+        <input type="text" id="au" placeholder="">
         <label>Mật khẩu</label>
-        <input type="password" id="ap" placeholder="Nhập: khang123">
+        <input type="password" id="ap" placeholder="">
         <button onclick="adminLogin()">ĐĂNG NHẬP QUẢN TRỊ</button>
     </div>
 
@@ -44,7 +44,7 @@
         <p style="text-align:center; font-size:13px; color:#666; margin-bottom: 20px;">Tạo user cho cán bộ đăng bài viết</p>
         
         <label>Tên đăng nhập mới</label>
-        <input type="text" id="nu" placeholder="Ví dụ: canbotruyenchuong">
+        <input type="text" id="nu" placeholder="Ví dụ: tencanbo">
         <label>Email liên kết</label>
         <input type="email" id="ne" placeholder="Ví dụ: cb1@cantho.gov.vn">
         <label>Mật khẩu khởi tạo</label>
@@ -62,7 +62,7 @@
     </div>
 
     <script>
-        // 1. Hàm Xử lý đăng nhập Admin
+        // 1. Hàm xử lý đăng nhập Admin, mặc định tên và mật khẩu
         function adminLogin() {
             if(document.getElementById('au').value === 'khang' && document.getElementById('ap').value === 'khang123') {
                 document.getElementById('login-box').classList.add('hidden');
@@ -71,7 +71,7 @@
             } else { alert("Sai thông tin quản trị viên!"); }
         }
 
-        // 2. Hàm Thêm User
+        // 2. Hàm thêm User
         function createUser() {
             const username = document.getElementById('nu').value.trim();
             const email = document.getElementById('ne').value.trim();
