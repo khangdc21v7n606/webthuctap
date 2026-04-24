@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cấp tài khoản User</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #0056b3; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #004494; }
+        .hidden { display: none; }
+        #user-list { margin-top: 20px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="admin-login-box">
+    <h2>Đăng nhập Admin</h2>
+    <input type="text" id="admin-user" placeholder="Tên đăng nhập (khang)">
+    <input type="password" id="admin-pass" placeholder="Mật khẩu (khang123)">
+    <button onclick="loginAdmin()">Đăng nhập</button>
+</div>
+
+<div class="container hidden" id="admin-dashboard">
+    <h2>Tạo tài khoản User Phường</h2>
+    <input type="text" id="new-user" placeholder="Tên đăng nhập">
+    <input type="email" id="new-email" placeholder="Email">
+    <input type="password" id="new-pass" placeholder="Mật khẩu">
+    <button onclick="createUser()">Cấp tài khoản</button>
+    
+    <div id="user-list">
+        <h3>Danh sách User hiện có:</h3>
+        <ul id="users-ul"></ul>
+    </div>
+</div>
+
+<script>
+    // Kiểm tra trạng thái admin
+    if (sessionStorage.getItem('adminLogged') === 'true') {
+        showDashboard();
+    }
+
+    function loginAdmin() {
+        const u = document.getElementById('admin-user').value;
+        const p = document.getElementById('admin-pass').value;
+        if (u === 'khang' && p === 'khang123') {
+            sessionStorage.setItem('adminLogged', 'true');
+            showDashboard();
+        } else {
+            alert('Sai thông tin đăng nhập Admin!');
+        }
+    }
+
+    function showDashboard() {
+        document.getElementById('admin-login-box').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.remove('hidden');
+        renderUsers();
+    }
+
+    function createUser() {
+        const username = document.getElementById('new-user').value.trim();
+        const email = document.getElementById('new-email').value.trim();
+        const password = document.getElementById('new-pass').value.trim();
+
+        if (!username || !email || !password) return alert('Vui lòng điền đủ thông tin!');
+
+        let users = JSON.parse(localStorage.getItem('phuong_users')) || [];
+        users.push({ username, email, password });
+        localStorage.setItem('phuong_users', JSON.stringify(users));
+        
+        alert('Tạo User thành công!');
+        document.getElementById('new-user').value = '';
+        document.getElementById('new-email').value = '';
+        document.getElementById('new-pass').value = '';
+        renderUsers();
+    }
+
+    function renderUsers() {
+        let users = JSON.parse(localStorage.getItem('phuong_users')) || [];
+        const ul = document.getElementById('users-ul');
+        ul.innerHTML = '';
+        users.forEach(u => {
+            let li = document.createElement('li');
+            li.textContent = `${u.username} - ${u.email}`;
+            ul.appendChild(li);
+        });
+    }
+</script>
+
+</body>
+</html>

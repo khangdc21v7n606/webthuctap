@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Thông Tin Điện Tử - UBND Phường Thới An Đông</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <span>Hôm nay: <span id="current-date"></span></span>
+            <span>Hotline: 0292 3841 234 | Email: ubndthoiandong@cantho.gov.vn</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="container header-container">
+            <div class="logo-area">
+                <div class="quoc-huy">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br>Độc lập - Tự do - Hạnh phúc</div>
+                <div class="site-title">
+                    <h1>CỔNG THÔNG TIN ĐIỆN TỬ</h1>
+                    <h2>UBND PHƯỜNG THỚI AN ĐÔNG - TP CẦN THƠ</h2>
+                </div>
+            </div>
+            <div id="header-actions">
+                </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <a href="index.html" class="active">Trang chủ</a>
+            <a href="#">Giới thiệu</a>
+            <a href="#">Thủ tục hành chính</a>
+            <a href="#">Tin tức - Sự kiện</a>
+            <a href="#">Liên hệ</a>
+        </div>
+    </nav>
+
+    <main class="container main-layout">
+        <section class="content-area" id="app-content">
+            </section>
+
+        <aside class="sidebar">
+            <div class="widget">
+                <h3 class="widget-title">THÔNG BÁO MỚI</h3>
+                <ul class="widget-list">
+                    <li><a href="#">Lịch tiếp công dân tháng này</a></li>
+                    <li><a href="#">Hướng dẫn cài đặt VNeID mức 2</a></li>
+                    <li><a href="#">Kế hoạch tiêm vắc xin phòng bệnh</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h3 class="widget-title">LIÊN KẾT HỮU ÍCH</h3>
+                <div class="banner-link">Cổng Dịch vụ công Quốc gia</div>
+                <div class="banner-link">Hệ thống phản ánh kiến nghị</div>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <h3>CƠ QUAN CHỦ QUẢN: UBND QUẬN BÌNH THỦY</h3>
+                <p><strong>CỔNG THÔNG TIN ĐIỆN TỬ PHƯỜNG THỚI AN ĐÔNG</strong></p>
+                <p>Chịu trách nhiệm chính: Chủ tịch UBND Phường</p>
+            </div>
+            <div>
+                <h3>THÔNG TIN LIÊN HỆ</h3>
+                <p>📍 Địa chỉ: Phường Thới An Đông, Quận Bình Thủy, TP. Cần Thơ</p>
+                <p>📞 Điện thoại: 0292 3841 234</p>
+                <p>✉️ Email: ubndthoiandong@cantho.gov.vn</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © Bản quyền thuộc về UBND Phường Thới An Đông. Ghi rõ nguồn khi phát hành lại thông tin.
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 style="color:#b30000; text-align:center; border-bottom: 2px solid #eee; padding-bottom:10px;">ĐĂNG NHẬP HỆ THỐNG</h3>
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" id="login-user" placeholder="Nhập tài khoản">
+                <label>Email liên kết</label>
+                <input type="email" id="login-email" placeholder="Nhập email">
+                <label>Mật khẩu</label>
+                <input type="password" id="login-pass" placeholder="Nhập mật khẩu">
+                <button class="btn-submit" onclick="handleLogin()">ĐĂNG NHẬP</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
