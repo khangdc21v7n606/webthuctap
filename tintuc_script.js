@@ -1,4 +1,4 @@
-const archiveArea = document.getElementById('news-archive-content');
+const archiveArea = document.querySelector('.content-area');
 
 function init() {
     renderDate();
@@ -56,7 +56,7 @@ function renderAllArticles() {
                     }
 
                     html += `
-                        <div class="article-card">
+                        <div class="article-card" style="cursor:pointer;" onclick="renderDetail('${art.id}')">
                             <img src="${imageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';" alt="Hình ảnh">
                             <div class="article-body">
                                 <h3 class="article-title">${art.title}</h3>
@@ -132,3 +132,29 @@ function closeModal() { document.getElementById('loginModal').style.display = 'n
 
 // Chạy hệ thống
 init();
+
+// 6. Xem chi tiết bài viết
+function renderDetail(id) {
+    // Gọi PHP để lấy lại danh sách và tìm đúng bài có ID tương ứng
+    fetch('api.php?action=get_all_articles')
+        .then(response => response.json())
+        .then(articles => {
+            const art = articles.find(a => a.id == id); // Tìm bài viết có id khớp
+            if (!art) return;
+
+            // Xử lý ảnh lỗi
+            const imageUrl = art.image ? art.image : 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
+            // Vẽ giao diện chi tiết đè lên khu vực danh sách
+            archiveArea.innerHTML = `
+                <div style="background:white; padding:30px; border-radius:8px; border:1px solid #eee;">
+                    <button class="btn-action btn-logout" onclick="renderAllArticles()" style="margin-bottom:20px;">&larr; Quay lại danh sách</button>
+                    <h1 style="color:var(--primary-color); margin-top:0;">${art.title}</h1>
+                    <p style="color:#666; border-bottom:1px solid #eee; padding-bottom:10px;">🕒 Đăng lúc: ${art.created_at}</p>
+                    <img src="${imageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';" style="width:100%; border-radius:8px; margin-bottom:20px; max-height:400px; object-fit:cover;">
+                    <div style="white-space: pre-wrap; font-size:16px; line-height:1.8;">${art.content}</div>
+                </div>
+            `;
+        })
+        .catch(err => console.error("Lỗi tải chi tiết:", err));
+}

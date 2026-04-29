@@ -106,18 +106,29 @@ function renderPostForm() {
         });
 }
 
-function renderDetail(index) {
-    const articles = JSON.parse(localStorage.getItem('phuong_articles')) || [];
-    const art = articles[index];
-    appContent.innerHTML = `
-        <div style="background:white; padding:30px; border-radius:8px; border:1px solid #eee;">
-            <button class="btn-action btn-logout" onclick="renderHome()" style="margin-bottom:20px;">&larr; Quay lại danh sách</button>
-            <h1 style="color:var(--primary-color); margin-top:0;">${art.title}</h1>
-            <p style="color:#666; border-bottom:1px solid #eee; padding-bottom:10px;">🕒 Đăng lúc: ${art.date}</p>
-            <img src="${art.image}" style="width:100%; border-radius:8px; margin-bottom:20px; max-height:400px; object-fit:cover;">
-            <div style="white-space: pre-wrap; font-size:16px; line-height:1.8;">${art.content}</div>
-        </div>
-    `;
+// Xem chi tiết bài viết (Đã nâng cấp dùng PHP)
+function renderDetail(id) {
+    // Gọi PHP để lấy bài viết
+    fetch('api.php?action=get_articles')
+        .then(response => response.json())
+        .then(articles => {
+            const art = articles.find(a => a.id == id); // Tìm bài đúng ID
+            if (!art) return;
+
+            const imageUrl = art.image ? art.image : 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
+            // Vẽ nội dung chi tiết
+            appContent.innerHTML = `
+                <div style="background:white; padding:30px; border-radius:8px; border:1px solid #eee;">
+                    <button class="btn-action btn-logout" onclick="renderHome()" style="margin-bottom:20px;">&larr; Quay lại trang chủ</button>
+                    <h1 style="color:var(--primary-color); margin-top:0;">${art.title}</h1>
+                    <p style="color:#666; border-bottom:1px solid #eee; padding-bottom:10px;">🕒 Đăng lúc: ${art.created_at}</p>
+                    <img src="${imageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';" style="width:100%; border-radius:8px; margin-bottom:20px; max-height:400px; object-fit:cover;">
+                    <div style="white-space: pre-wrap; font-size:16px; line-height:1.8;">${art.content}</div>
+                </div>
+            `;
+        })
+        .catch(err => console.error("Lỗi tải chi tiết:", err));
 }
 
 function submitPost() {
