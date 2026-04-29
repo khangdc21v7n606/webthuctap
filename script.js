@@ -16,7 +16,7 @@ function renderApp() {
 function checkLoginStatus() {
     const user = sessionStorage.getItem('currentUser');
     const headerActions = document.getElementById('header-actions');
-    
+
     if (user) {
         headerActions.innerHTML = `
             <span style="font-size:14px; margin-right:15px; font-weight:bold;">Xin chào, Cán bộ ${user}</span>
@@ -29,63 +29,50 @@ function checkLoginStatus() {
 }
 
 function renderHome() {
-    const articles = JSON.parse(localStorage.getItem('phuong_articles')) || [];
-    const user = sessionStorage.getItem('currentUser'); // Kiểm tra xem có ai đang đăng nhập không
-    
-    let html = `<h2 class="section-title">TIN TỨC - SỰ KIỆN MỚI NHẤT</h2><div class="article-grid">`;
-    
-    if (articles.length === 0) {
-        html += `<p style="grid-column: span 2; color:#888;">Hệ thống chưa có bài viết nào.</p>`;
-    } else {
-        articles.forEach((art, index) => {
-            
-            // Tạo nút Xóa (chỉ hiển thị nếu cán bộ đã đăng nhập)
-            let deleteButton = "";
-            if (user) {
-                deleteButton = `
-                    <button onclick="deletePost(${index}, event)" style="margin-top: 15px; width: 100%; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                        🗑️ Xóa bài viết
-                    </button>
-                `;
+    const user = sessionStorage.getItem('currentUser');
+
+    // GỌI PHP để lấy bài viết
+    fetch('api.php?action=get_articles')
+        .then(response => response.json())
+        .then(articles => {
+            let html = `<h2 class="section-title">TIN TỨC - SỰ KIỆN MỚI NHẤT</h2><div class="article-grid">`;
+
+            if (articles.length === 0) {
+                html += `<p style="grid-column: span 2; color:#888;">Chưa có bài viết nào.</p>`;
+            } else {
+                articles.forEach((art) => {
+
+                    // 1. XỬ LÝ ẢNH MẶC ĐỊNH (Hình Obama)
+                    // Nếu art.image bị rỗng, nó sẽ tự lấy link ảnh Obama
+                    const imageUrl = art.image ? art.image : 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
+                    // 2. TẠO NÚT XÓA (Chỉ hiện khi có cán bộ đăng nhập)
+                    let deleteButton = "";
+                    if (user) {
+                        // Chú ý: Truyền art.id (ID trong Database) thay vì index
+                        deleteButton = `
+                            <button onclick="deletePost(${art.id}, event)" style="margin-top: 15px; width: 100%; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                                🗑️ Xóa bài viết
+                            </button>
+                        `;
+                    }
+
+                    html += `
+                        <div class="article-card" onclick="renderDetail(${art.id})">
+                            <img src="${imageUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';" alt="Thumb">
+                            <div class="article-body">
+                                <h3 class="article-title">${art.title}</h3>
+                                <span class="article-date">🕒 ${art.created_at}</span>
+                                ${deleteButton}
+                            </div>
+                        </div>
+                    `;
+                });
             }
-
-            html += `
-                <div class="article-card" onclick="renderDetail(${index})">
-                    <img src="${art.image}" alt="Thumb">
-                    <div class="article-body">
-                        <h3 class="article-title">${art.title}</h3>
-                        <span class="article-date">🕒 ${art.date}</span>
-                        ${deleteButton}
-                    </div>
-                </div>
-            `;
-        });
-    }
-    html += `</div>`;
-    appContent.innerHTML = html;
-}
-
-// Hàm xử lý việc xóa bài viết
-function deletePost(index, event) {
-    // Ngăn không cho sự kiện click lan ra thẻ cha (tránh việc click Xóa mà lại mở chi tiết bài viết)
-    event.stopPropagation(); 
-
-    // Hiển thị hộp thoại xác nhận để tránh bấm nhầm
-    if (confirm("Đồng chí có chắc chắn muốn xóa bài báo này không? Thao tác này không thể hoàn tác!")) {
-        
-        // 1. Lấy danh sách bài viết hiện tại
-        let articles = JSON.parse(localStorage.getItem('phuong_articles')) || [];
-        
-        // 2. Xóa 1 phần tử tại vị trí 'index'
-        articles.splice(index, 1);
-        
-        // 3. Lưu lại danh sách mới vào bộ nhớ
-        localStorage.setItem('phuong_articles', JSON.stringify(articles));
-        
-        // 4. Thông báo và tải lại giao diện
-        alert("Đã xóa bài viết thành công!");
-        renderHome();
-    }
+            html += `</div>`;
+            document.getElementById('app-content').innerHTML = html;
+        })
+        .catch(err => console.error("Lỗi khi tải dữ liệu:", err));
 }
 
 function renderPostForm() {
@@ -135,40 +122,70 @@ function renderDetail(index) {
 
 function submitPost() {
     const title = document.getElementById('post-title').value;
-    const image = document.getElementById('post-image').value || 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-    
-    // LẤY DỮ LIỆU TỪ CKEDITOR THAY VÌ TEXTAREA THÔNG THƯỜNG
-    const content = myEditor.getData(); 
+    const image = document.getElementById('post-image').value || 'https://via.placeholder.com/400x200';
 
-    if (!title || !content) return alert("Vui lòng điền đủ Tiêu đề và Nội dung!");
+    // --- ĐÂY LÀ DÒNG CẦN SỬA ---
+    // Xóa dòng cũ: const content = document.getElementById('post-content').value;
+    // Thay bằng dòng mới:
+    const content = myEditor.getData();
 
-    let articles = JSON.parse(localStorage.getItem('phuong_articles')) || [];
-    const newArt = { title, image, content, date: new Date().toLocaleString('vi-VN') };
+    // Kiểm tra xem đã nhập đủ chưa
+    if (!title || !content) {
+        return alert("Vui lòng điền đủ Tiêu đề và Nội dung!");
+    }
 
-    articles.unshift(newArt);
-    if (articles.length > 4) articles.pop();
+    // Gói dữ liệu lại
+    const postData = { title: title, image: image, content: content };
 
-    localStorage.setItem('phuong_articles', JSON.stringify(articles));
-    alert("Xuất bản bài viết thành công!");
-    renderHome();
+    // Gửi lên PHP thông qua phương thức POST
+    fetch('api.php?action=add_article', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("Xuất bản bài viết thành công!");
+                renderHome(); // Tải lại trang web để hiện bài mới
+            } else {
+                alert("Đã xảy ra lỗi khi lưu vào Database.");
+            }
+        })
+        .catch(err => {
+            console.error("Lỗi:", err);
+            alert("Không thể kết nối đến máy chủ PHP!");
+        });
 }
 
 function handleLogin() {
     const u = document.getElementById('login-user').value;
-    const e = document.getElementById('login-email').value;
+    const e = document.getElementById('login-email').value; // Có thể bỏ qua email nếu đăng nhập chỉ cần user/pass
     const p = document.getElementById('login-pass').value;
-    
-    const users = JSON.parse(localStorage.getItem('phuong_users')) || [];
-    const valid = users.find(user => user.username === u && user.email === e && user.password === p);
 
-    if (valid) {
-        sessionStorage.setItem('currentUser', valid.username);
-        closeModal();
-        checkLoginStatus();
-        renderHome();
-    } else {
-        alert("Thông tin không chính xác hoặc tài khoản chưa được cấp!");
-    }
+    if (!u || !p) return alert("Vui lòng nhập đủ thông tin!");
+
+    // Gọi PHP để kiểm tra đăng nhập trên Database
+    fetch('api.php?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                sessionStorage.setItem('currentUser', data.username);
+                closeModal();
+                checkLoginStatus();
+                renderHome();
+            } else {
+                alert("Sai tên đăng nhập hoặc mật khẩu!");
+            }
+        })
+        .catch(err => {
+            console.error("Lỗi đăng nhập:", err);
+            alert("Không thể kết nối đến máy chủ!");
+        });
 }
 
 function handleLogout() {
@@ -181,7 +198,28 @@ function openModal() { document.getElementById('loginModal').style.display = 'bl
 function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
 
 window.addEventListener('storage', () => {
-    if(document.querySelector('.article-grid')) renderHome();
+    if (document.querySelector('.article-grid')) renderHome();
 });
 
 renderApp();
+// Hàm yêu cầu PHP xóa bài viết
+function deletePost(id, event) {
+    event.stopPropagation(); // Ngăn việc click nhầm vào xem chi tiết bài
+
+    if (confirm("Đồng chí có chắc chắn muốn xóa bài viết này khỏi hệ thống?")) {
+        fetch('api.php?action=delete_article', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id }) // Gửi ID của bài viết lên cho PHP
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert("Đã xóa bài viết thành công!");
+                    renderHome(); // Tải lại giao diện
+                } else {
+                    alert("Lỗi: Không thể xóa bài viết!");
+                }
+            });
+    }
+}

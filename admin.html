@@ -1,37 +1,142 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Hệ thống Quản trị - Phường Thới An Đông</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Roboto', sans-serif; background: #e9ecef; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding-top: 50px; padding-bottom: 50px; }
-        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box;}
-        h2, h3, h4 { text-align: center; color: #b30000; margin-top: 0; }
-        label { font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; background: #b30000; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s;}
-        button:hover { background: #8a0000; }
-        
-        .btn-success { background: #28a745; }
-        .btn-success:hover { background: #218838; }
-        .btn-danger { background: #dc3545; padding: 6px 12px; font-size: 12px; width: auto; }
-        .btn-danger:hover { background: #c82333; }
-        
-        .hidden { display: none; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
-        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+
+        h2,
+        h3,
+        h4 {
+            text-align: center;
+            color: #b30000;
+            margin-top: 0;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background: #b30000;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #8a0000;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 25px 0;
+        }
+
         /* Cấu trúc danh sách user */
-        .user-list { list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; }
-        .user-item { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; border: 1px solid #dee2e6; padding: 10px 15px; border-radius: 6px; margin-bottom: 10px; }
-        .user-info strong { color: #333; font-size: 15px; }
-        .user-info small { color: #666; display: block; font-size: 12px; }
+        .user-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .user-info strong {
+            color: #333;
+            font-size: 15px;
+        }
+
+        .user-info small {
+            color: #666;
+            display: block;
+            font-size: 12px;
+        }
     </style>
 </head>
+
 <body>
     <div class="card" id="login-box">
         <h2>PORTAL QUẢN TRỊ VIÊN</h2>
-        <p style="text-align:center; color:#666; font-size:14px; margin-bottom:25px;">Chỉ dành riêng cho Admin cấp cao</p>
+        <p style="text-align:center; color:#666; font-size:14px; margin-bottom:25px;">Chỉ dành riêng cho Admin cấp cao
+        </p>
         <label>Tài khoản Admin</label>
         <input type="text" id="au" placeholder="">
         <label>Mật khẩu</label>
@@ -41,8 +146,9 @@
 
     <div class="card hidden" id="main-box">
         <h3>CẤP TÀI KHOẢN CÁN BỘ</h3>
-        <p style="text-align:center; font-size:13px; color:#666; margin-bottom: 20px;">Tạo user cho cán bộ đăng bài viết</p>
-        
+        <p style="text-align:center; font-size:13px; color:#666; margin-bottom: 20px;">Tạo user cho cán bộ đăng bài viết
+        </p>
+
         <label>Tên đăng nhập mới</label>
         <input type="text" id="nu" placeholder="Ví dụ: tencanbo">
         <label>Email liên kết</label>
@@ -55,91 +161,100 @@
 
         <h4>DANH SÁCH CÁN BỘ HIỆN TẠI</h4>
         <ul class="user-list" id="users-container">
-            </ul>
+        </ul>
         <div style="text-align:center; margin-top:20px;">
-             <button onclick="adminLogout()" style="background:#6c757d; width:auto; padding: 8px 20px;">Đăng xuất</button>
+            <button onclick="adminLogout()" style="background:#6c757d; width:auto; padding: 8px 20px;">Đăng
+                xuất</button>
         </div>
     </div>
 
     <script>
-        // 1. Hàm xử lý đăng nhập Admin, mặc định tên và mật khẩu
+        // 1. Đăng nhập Admin
         function adminLogin() {
-            if(document.getElementById('au').value === 'khang' && document.getElementById('ap').value === 'khang123') {
+            // Chỗ này tạm thời vẫn giữ tài khoản cứng của Admin cho nhanh gọn
+            if (document.getElementById('au').value === 'khang' && document.getElementById('ap').value === 'khang123') {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('main-box').classList.remove('hidden');
-                renderUsers(); // Tải danh sách user ngay khi đăng nhập thành công
+                renderUsers(); // Tải danh sách user từ Database
             } else { alert("Sai thông tin quản trị viên!"); }
         }
 
-        // 2. Hàm thêm User
+        // 2. Thêm User Mới vào Database
         function createUser() {
             const username = document.getElementById('nu').value.trim();
             const email = document.getElementById('ne').value.trim();
             const password = document.getElementById('np').value.trim();
-            
-            if(!username || !password || !email) return alert("Vui lòng điền đầy đủ các trường!");
 
-            let users = JSON.parse(localStorage.getItem('phuong_users')) || [];
-            
-            // Kiểm tra xem user đã tồn tại chưa
-            const isExist = users.some(u => u.username === username);
-            if (isExist) return alert("Tên đăng nhập này đã tồn tại! Vui lòng chọn tên khác.");
+            if (!username || !password || !email) return alert("Vui lòng điền đầy đủ thông tin!");
 
-            users.push({username, email, password});
-            localStorage.setItem('phuong_users', JSON.stringify(users));
-            
-            alert(`Đã cấp thành công tài khoản: ${username}`);
-            
-            // Xóa trắng form sau khi tạo
-            document.getElementById('nu').value = '';
-            document.getElementById('ne').value = '';
-            document.getElementById('np').value = '';
-            
-            // Cập nhật lại danh sách bên dưới
-            renderUsers();
+            fetch('api.php?action=add_user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert(`Đã cấp thành công tài khoản: ${username}`);
+                        document.getElementById('nu').value = '';
+                        document.getElementById('ne').value = '';
+                        document.getElementById('np').value = '';
+                        renderUsers(); // Cập nhật lại danh sách bên dưới
+                    } else {
+                        alert("Lỗi: " + data.message); // Báo lỗi nếu trùng tên
+                    }
+                })
+                .catch(err => console.error(err));
         }
 
-        // 3. Hàm Hiển thị danh sách User
+        // 3. Lấy và hiển thị danh sách User từ Database
         function renderUsers() {
-            const users = JSON.parse(localStorage.getItem('phuong_users')) || [];
             const container = document.getElementById('users-container');
-            
-            let html = '';
-            if (users.length === 0) {
-                html = `<li style="text-align:center; color:#888; font-size:13px; padding:10px;">Chưa có tài khoản cán bộ nào được cấp.</li>`;
-            } else {
-                users.forEach((u, index) => {
-                    html += `
-                        <li class="user-item">
-                            <div class="user-info">
-                                <strong>👤 ${u.username}</strong>
-                                <small>✉️ ${u.email}</small>
-                            </div>
-                            <button class="btn-danger" onclick="deleteUser(${index})">Xóa bỏ</button>
-                        </li>
-                    `;
-                });
-            }
-            container.innerHTML = html;
+
+            fetch('api.php?action=get_users')
+                .then(response => response.json())
+                .then(users => {
+                    let html = '';
+                    if (users.length === 0) {
+                        html = `<li style="text-align:center; color:#888; font-size:13px; padding:10px;">Chưa có tài khoản cán bộ nào được cấp.</li>`;
+                    } else {
+                        users.forEach((u) => {
+                            html += `
+                    <li class="user-item">
+                        <div class="user-info">
+                            <strong>👤 ${u.username}</strong>
+                            <small>✉️ ${u.email}</small>
+                        </div>
+                        <button class="btn-danger" onclick="deleteUser(${u.id})">Xóa bỏ</button>
+                    </li>
+                `;
+                        });
+                    }
+                    container.innerHTML = html;
+                })
+                .catch(err => console.error(err));
         }
 
-        // 4. Hàm Xóa User
-        function deleteUser(index) {
+        // 4. Xóa User khỏi Database
+        function deleteUser(id) {
             if (confirm("Đồng chí có chắc chắn muốn thu hồi (xóa) tài khoản này không?")) {
-                let users = JSON.parse(localStorage.getItem('phuong_users')) || [];
-                
-                // Cắt bỏ 1 user tại vị trí index
-                users.splice(index, 1);
-                
-                // Lưu lại mảng mới
-                localStorage.setItem('phuong_users', JSON.stringify(users));
-                
-                // Vẽ lại giao diện
-                renderUsers();
+                fetch('api.php?action=delete_user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            renderUsers(); // Tải lại danh sách
+                        } else {
+                            alert("Không thể xóa user này!");
+                        }
+                    });
             }
         }
 
-        // 5. Hàm Đăng xuất
+        // 5. Đăng xuất
         function adminLogout() {
             document.getElementById('au').value = '';
             document.getElementById('ap').value = '';
@@ -148,4 +263,5 @@
         }
     </script>
 </body>
+
 </html>
